@@ -22,6 +22,8 @@ namespace FreedomClient.ViewModels.WoW
 
         public ICommand? ChangeInstallPathCommand { get; set; }
 
+        public ICommand? SecretTriggeredCommand { get; set; }
+
         public ApplicationState ApplicationState { get; set; }
 
         public string LogPath { get; set; }
@@ -64,6 +66,11 @@ namespace FreedomClient.ViewModels.WoW
 
                     ApplicationState.InstallPath = folderDialog.SelectedPath;
                     mediator.Send(new RestoreWoWClientFilesCommand() { CompleteReset = false });
+                });
+            SecretTriggeredCommand = new RelayCommand((_) => true,
+                (_) =>
+                {
+                    ApplicationState.UIOperation.Message = "You entered the secret code!";
                 });
         }
     }
