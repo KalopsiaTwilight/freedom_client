@@ -35,32 +35,25 @@
             <ccntrl:HamburgerMenu.Background>
                 <SolidColorBrush Color="#1A1D1A" Opacity="0.9"></SolidColorBrush>
             </ccntrl:HamburgerMenu.Background>
-            <StackPanel>
-                <ccntrl:HamburgerMenuItem 
-                    Command="{Binding NavigateSubFrameCommand}" 
-                    CommandParameter="{x:Type wowViews:WoWHomePageView}"
-                >
-                    <TextBlock Style="{DynamicResource SettingsTextStyle}" Text="{StaticResource txt_MainWindow_NavBar_PageHome}"></TextBlock>
-                </ccntrl:HamburgerMenuItem>
-                <ccntrl:HamburgerMenuItem 
-                    Command="{Binding NavigateSubFrameCommand}" 
-                    CommandParameter="{x:Type wowViews:WoWPatchesPageView}"
-                >
-                    <TextBlock Style="{DynamicResource SettingsTextStyle}" Text="{StaticResource txt_MainWindow_NavBar_PagePatches}"></TextBlock>
-                </ccntrl:HamburgerMenuItem>
-                <ccntrl:HamburgerMenuItem 
-                    Command="{Binding NavigateSubFrameCommand}" 
-                    CommandParameter="{x:Type wowViews:WoWAddonsPageView}"
-                >
-                    <TextBlock Style="{DynamicResource SettingsTextStyle}" Text="{StaticResource txt_MainWindow_NavBar_PageAddons}"></TextBlock>
-                </ccntrl:HamburgerMenuItem>
-                <ccntrl:HamburgerMenuItem 
-                    Command="{Binding NavigateSubFrameCommand}" 
-                    CommandParameter="{x:Type wowViews:WoWSettingsPageView}"
-                >
-                    <TextBlock Style="{DynamicResource SettingsTextStyle}" Text="{StaticResource txt_MainWindow_NavBar_PageSettings}"></TextBlock>
-                </ccntrl:HamburgerMenuItem>
-            </StackPanel>
+            <ItemsControl ItemsSource="{Binding MenuItems}">
+                <ItemsControl.Template>
+                    <ControlTemplate TargetType="ItemsControl">
+                        <StackPanel>
+                            <ItemsPresenter/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </ItemsControl.Template>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <ccntrl:HamburgerMenuItem 
+                            Command="{Binding NavigateSubFrameCommand}" 
+                            CommandParameter="{Binding PageType}"
+                        >
+                            <TextBlock Style="{DynamicResource SettingsTextStyle}" Text="{Binding Text}"></TextBlock>
+                        </ccntrl:HamburgerMenuItem>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </ccntrl:HamburgerMenu>
 
         <Grid Grid.Row="0" Name="MenuGrid">

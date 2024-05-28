@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PropertyChanged;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Windows;
@@ -27,6 +28,7 @@ namespace FreedomClient.ViewModels
         public ICommand? CloseCommand { get; set; }
         public ICommand? OpenNavMenuCommand { get; set; }
         public ICommand? NavigateSubFrameCommand { get; set; }
+        public List<MenuItem> MenuItems { get; set; }
 
         public object CurrentFrame { get; set; }
         public MainWindow? MainWindow { get; set; }
@@ -37,6 +39,7 @@ namespace FreedomClient.ViewModels
             _logger = serviceProvider.GetRequiredService<ILogger<MainWindowViewModel>>();
             _httpClient = serviceProvider.GetRequiredService<HttpClient>();
             _appState = serviceProvider.GetRequiredService<ApplicationState>();
+
 
             IsNavMenuOpen = false;
 
@@ -54,6 +57,13 @@ namespace FreedomClient.ViewModels
             });
 
             CurrentFrame = serviceProvider.GetRequiredService<WoWShellView>();
+
+            MenuItems = [
+                new MenuItem() { PageType = typeof(WoWHomePageView), Text = (string)Application.Current.FindResource("txt_MainWindow_NavBar_PageHome"), NavigateSubFrameCommand = NavigateSubFrameCommand },
+                new MenuItem() { PageType = typeof(WoWPatchesPageView), Text = (string)Application.Current.FindResource("txt_MainWindow_NavBar_PagePatches"), NavigateSubFrameCommand = NavigateSubFrameCommand },
+                new MenuItem() { PageType = typeof(WoWAddonsPageView), Text = (string)Application.Current.FindResource("txt_MainWindow_NavBar_PageAddons"), NavigateSubFrameCommand = NavigateSubFrameCommand },
+                new MenuItem() { PageType = typeof(WoWSettingsPageView), Text = (string)Application.Current.FindResource("txt_MainWindow_NavBar_PageSettings"), NavigateSubFrameCommand = NavigateSubFrameCommand },
+            ];
 
             TestLatestVersion();
         }
@@ -123,5 +133,12 @@ namespace FreedomClient.ViewModels
             }
         }
 
+    }
+
+    public class MenuItem
+    {
+        public ICommand? NavigateSubFrameCommand { get; set; }
+        public required Type PageType { get; set; }
+        public required string Text { get; set; }
     }
 }
