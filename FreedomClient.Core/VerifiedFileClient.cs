@@ -66,6 +66,11 @@ namespace FreedomClient.Core
                 {
                     toRedownload.Add(entry.Key, entry.Value);
                 }
+                catch (IOException)
+                {
+                    File.Delete(filePath);
+                    toRedownload.Add(entry.Key, entry.Value);
+                }
                 catch (Exception e)
                 {
                     ExceptionDuringVerify?.Invoke(this, new ExceptionDuringVerifyEventArgs(e));
