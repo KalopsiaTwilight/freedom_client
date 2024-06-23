@@ -85,7 +85,7 @@ namespace FreedomClient.Commands
                     return;
                 }
 
-                _appState.InstalledPatches.RemoveAll(x => x.Title == request.Addon.Title);
+                _appState.InstalledAddons.RemoveAll(x => x.Title == request.Addon.Title);
                 request.Addon.IsInstalled = false;
 
                 _appState.UIOperation.Progress = 100;
