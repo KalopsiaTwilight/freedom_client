@@ -1,10 +1,6 @@
 ﻿using PropertyChanged;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace FreedomClient.Models
 {
@@ -42,7 +38,7 @@ namespace FreedomClient.Models
         public string Manifest { get; set; }
         public string Signature{ get; set; }
 
-        public static Addon TotalRP3 = new Addon()
+        public static Addon TotalRP3 = new()
         {
             Manifest =  "https://cdn.wowfreedom-rp.com/client_content/addons/totalRP3.manifest",
             Title = "Total RP 3",
@@ -53,7 +49,7 @@ namespace FreedomClient.Models
             Description = "The best roleplaying addon for World of Warcraft."
         };
 
-        public static Addon Elephant = new Addon()
+        public static Addon Elephant = new()
         {
             Manifest = "https://cdn.wowfreedom-rp.com/client_content/addons/Elephant.manifest",
             Title = "Elephant",
