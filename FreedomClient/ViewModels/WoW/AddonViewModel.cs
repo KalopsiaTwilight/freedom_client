@@ -8,7 +8,7 @@ namespace FreedomClient.ViewModels.WoW
     [AddINotifyPropertyChangedInterface]
     public class AddonViewModel
     {
-        public Addon? Addon { get; set; }
+        public AddonItem? Addon { get; set; }
 
         public ICommand? InstallCommand { get; set; }
 

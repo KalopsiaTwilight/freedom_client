@@ -40,5 +40,19 @@ namespace FreedomClient.DAL
             _appState.AvailableAddons = result;
             return result;
         }
+
+        public async Task<AddonCollection> GetFreedomRecommendedAddons()
+        {
+            var resp = await _httpClient.GetAsync(Constants.CdnUrl + "/client_content/recommended_addons.json");
+            resp.EnsureSuccessStatusCode();
+            var addonsJson = await resp.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<AddonCollection> (addonsJson);
+            if (result == null)
+            {
+                throw new Exception("Unable to parse freedom collection json file.");
+            }
+            result.IsInstalled = result.Addons.All(addonTitle => _appState.InstalledAddons.Any(addon => addon.Title == addonTitle));
+            return result;
+        }
     }
 }

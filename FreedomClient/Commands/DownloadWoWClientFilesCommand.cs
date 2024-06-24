@@ -1,4 +1,5 @@
 ﻿using FreedomClient.Core;
+using FreedomClient.DAL;
 using FreedomClient.Models;
 using FreedomClient.ViewModels.WoW;
 using MediatR;
@@ -25,9 +26,15 @@ namespace FreedomClient.Commands
 
     public class DownloadWoWClientFilesCommandHandler : FileClientUIOperationCommandHandler, IRequestHandler<DownloadWoWClientFilesCommand>
     {
-        public DownloadWoWClientFilesCommandHandler(VerifiedFileClient fileClient, ApplicationState appState, ILogger<DownloadWoWClientFilesCommandHandler> logger)
+        private readonly IMediator _mediator;
+        private readonly AddonsRepository _addonRepository;
+
+        public DownloadWoWClientFilesCommandHandler(VerifiedFileClient fileClient, ApplicationState appState, ILogger<DownloadWoWClientFilesCommandHandler> logger, 
+            IMediator mediator, AddonsRepository addonsRepository)
             : base(fileClient, appState, logger)
         {
+            _mediator = mediator;
+            _addonRepository = addonsRepository;
         }
 
         public async Task Handle(DownloadWoWClientFilesCommand request, CancellationToken cancellationToken)
@@ -90,6 +97,26 @@ namespace FreedomClient.Commands
                 CommandManager.InvalidateRequerySuggested();
                 _appState.LoadState = ApplicationLoadState.ReadyToLaunch;
                 CommandManager.InvalidateRequerySuggested();
+
+                var taskDialog = new TaskDialog
+                {
+                    MainInstruction = "Install Recommended Addons",
+                    Content = "Would you like to install recommended Addons for playing on Freedom WoW?"
+                };
+                taskDialog.Buttons.Add(new TaskDialogButton(ButtonType.Yes));
+                taskDialog.Buttons.Add(new TaskDialogButton(ButtonType.No));
+                var taskResult = taskDialog.ShowDialog();
+
+                if (taskResult.ButtonType == ButtonType.Yes)
+                {
+                    _appState.UIOperation.Progress = 0;
+                    _appState.UIOperation.Message = "Getting recommended Addons data...";
+                    _appState.UIOperation.ProgressReport = "";
+                    _appState.UIOperation.IsFinished = false;
+                    await _addonRepository.GetAddons();
+                    var recommended = await _addonRepository.GetFreedomRecommendedAddons();
+                    await _mediator.Send(new InstallWoWAddonCollectionCommand(recommended));
+                }
             }
             catch(OperationCanceledException)
             {

@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 namespace FreedomClient.Models
 {
     [AddINotifyPropertyChangedInterface]
-    public class Addon
+    public class AddonItem
     {
-        public Addon()
+        public AddonItem()
         {
             Author = string.Empty;
             Version = string.Empty;
@@ -19,10 +19,7 @@ namespace FreedomClient.Models
             Description = string.Empty;
             Title = string.Empty;
             IsInstalled = false;
-            Manifest = string.Empty;
-            Signature = string.Empty;
         }
-
         [AlsoNotifyFor(nameof(DisplayAuthor))]
         public string Author { get; set; }
         [JsonIgnore]
@@ -32,7 +29,28 @@ namespace FreedomClient.Models
         public string Description { get; set; }
         public string Title { get; set; }
         public bool IsInstalled { get; set; }
+    }
+
+    [AddINotifyPropertyChangedInterface]
+    public class Addon: AddonItem
+    {
+        public Addon()
+        {
+            Manifest = string.Empty;
+            Signature = string.Empty;
+        }
         public string Manifest { get; set; }
         public string Signature{ get; set; }
+    }
+
+    [AddINotifyPropertyChangedInterface]
+    public class AddonCollection: AddonItem
+    {
+        public AddonCollection()
+        {
+            Addons = Array.Empty<string>();
+        }
+
+        public string[] Addons { get; set; }
     }
 }

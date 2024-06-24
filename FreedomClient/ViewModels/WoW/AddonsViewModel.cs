@@ -22,19 +22,48 @@ namespace FreedomClient.ViewModels.WoW
         public bool IsLoading { get; set; }
         public IEnumerable<AddonViewModel> AddonViews
         {
-            get => Addons.Select(x => new AddonViewModel()
+            get
             {
-                Addon = x,
-                InstallCommand = InstallCommand,
-                RemoveCommand = RemoveCommand,
-            });
+                var result = new List<AddonViewModel>
+                {
+                    new()
+                    {
+                        Addon = RecommendedAddons,
+                        RemoveCommand = RemoveRecommendedCommand,
+                        InstallCommand = InstallRecommendedCommand
+                    }
+                };
+                result.AddRange(Addons.Select(x => new AddonViewModel()
+                {
+                    Addon = x,
+                    InstallCommand = InstallCommand,
+                    RemoveCommand = RemoveCommand,
+                }));
+                return result;
+            } 
         }
+
+        [AlsoNotifyFor("AddonViews")]
+        public AddonCollection RecommendedAddons { get; set; }
+        [AlsoNotifyFor("AddonViews")]
+        public ICommand? InstallRecommendedCommand { get; set; }
+        [AlsoNotifyFor("AddonViews")]
+        public ICommand? RemoveRecommendedCommand { get; set; }
 
         public AddonsViewModel()
         {
             IsLoading = false;
-            Addons = new List<Addon>()
+            RecommendedAddons = new AddonCollection()
             {
+                Author = "Freedom Team",
+                Description = "The recommended suite of Addons for playing on Freedom WoW ",
+                ImageSrc = "https://mm.wowfreedom-rp.com/assets/freedom_icon.png",
+                Title = "Freedom Recommended Addons",
+                Version = "Various"
+            };
+
+            Addons =
+            [
                 new Addon() {
                     Author = "KalopsiaTwilight",
                     Description = "Some information about the addon goes here",
@@ -57,7 +86,7 @@ namespace FreedomClient.ViewModels.WoW
                     Version = "133.7.420",
                     IsInstalled= true
                 }
-            };
+            ];
         }
     }
 }
