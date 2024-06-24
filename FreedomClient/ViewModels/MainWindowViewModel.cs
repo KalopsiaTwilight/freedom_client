@@ -86,7 +86,7 @@ namespace FreedomClient.ViewModels
                 if (result == MessageBoxResult.Yes)
                 {
                     await mgr.DownloadUpdatesAsync(newVersion);
-                    mgr.ApplyUpdatesAndRestart();
+                    mgr.ApplyUpdatesAndRestart(null, null);
                     return;
                 }
             }
