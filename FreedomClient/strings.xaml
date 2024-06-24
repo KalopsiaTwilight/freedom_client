@@ -35,7 +35,7 @@
     <clr:String x:Key="txt_WoW_Settings_LogDir">Log Directory</clr:String>
     <clr:String x:Key="txt_WoW_Settings_SoftResetInstall">Verify Install</clr:String>
     <clr:String x:Key="txt_WoW_Settings_HardResetInstall">Reset Install</clr:String>
-    <clr:String x:Key="txt_WoW_Settings_TT_LogDir">Copy Path</clr:String>
+    <clr:String x:Key="txt_WoW_Settings_TT_LogDir">Open Folder</clr:String>
     <clr:String x:Key="txt_WoW_Settings_TT_InstallDir">Change Path</clr:String>
     <clr:String x:Key="txt_WoW_Settings_Version">Launcher Version</clr:String>
     <clr:String x:Key="txt_WoW_Settings_ResetDB2">Reset DB2 files</clr:String>

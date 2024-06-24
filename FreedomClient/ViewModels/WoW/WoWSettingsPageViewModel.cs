@@ -6,6 +6,7 @@ using Ookii.Dialogs.Wpf;
 using PropertyChanged;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 
@@ -18,7 +19,7 @@ namespace FreedomClient.ViewModels.WoW
         public ICommand? SoftResetInstallCommand { get; set; }
         public ICommand? HardResetInstallCommand { get; set; }
 
-        public ICommand? CopyLogDirCommand { get; set; }
+        public ICommand? OpenLogDirCommand { get; set; }
 
         public ICommand? ChangeInstallPathCommand { get; set; }
 
@@ -38,9 +39,9 @@ namespace FreedomClient.ViewModels.WoW
             var localDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             LogPath = System.IO.Path.Join(localDataPath, Constants.AppIdentifier);
             Version = appState.Version;
-            CopyLogDirCommand = new RelayCommand((_) => true, (_) =>
+            OpenLogDirCommand = new RelayCommand((_) => true, (_) =>
             {
-                Clipboard.SetText(LogPath);
+                Process.Start("explorer", $@"""{LogPath}""");
             });
             SoftResetInstallCommand = new RelayCommand((_) => !ApplicationState.UIOperation.IsBusy && !string.IsNullOrEmpty(ApplicationState.InstallPath),
                 (_) =>

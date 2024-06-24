@@ -74,5 +74,10 @@
         <GeometryDrawing Brush="#32292F" Geometry="{StaticResource bars_solidGeometry}" />
     </DrawingGroup>
     <DrawingImage x:Key="bars_solidDrawingImage" Drawing="{StaticResource bars_solidDrawingGroup}" />
-
+    
+    <Geometry x:Key="folder_open_solidGeometry">F1 M576,512z M0,0z M88.7,223.8L0,375.8 0,96C0,60.7,28.7,32,64,32L181.5,32C198.5,32,214.8,38.7,226.8,50.7L253.3,77.2C265.3,89.2,281.6,95.9,298.6,95.9L416,95.9C451.3,95.9,480,124.6,480,159.9L480,191.9 144,191.9C121.2,191.9,100.2,204,88.7,223.7z M116.3,239.9C122.1,230,132.6,224,144,224L544,224C555.5,224 566,230.1 571.7,240.1 577.4,250.1 577.4,262.3 571.6,272.2L459.6,464.2C453.9,474,443.4,480,432,480L32,480C20.5,480 10,473.9 4.3,463.9 -1.4,453.9 -1.4,441.7 4.4,431.8L116.4,239.8z</Geometry>
+    <DrawingGroup x:Key="folder_open_solidDrawingGroup" ClipGeometry="M0,0 V512 H576 V0 H0 Z">
+        <GeometryDrawing Brush="#32292F" Geometry="{StaticResource folder_open_solidGeometry}" />
+    </DrawingGroup>
+    <DrawingImage x:Key="folder_open_solidDrawingImage" Drawing="{StaticResource folder_open_solidDrawingGroup}" />
 </ResourceDictionary>

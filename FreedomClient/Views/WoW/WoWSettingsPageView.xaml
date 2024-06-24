@@ -44,8 +44,8 @@
         <Button Style="{DynamicResource IconButtonStyle}" 
                 Grid.Row="2" Grid.Column="2" 
                 ToolTip="{StaticResource txt_WoW_Settings_TT_LogDir}" 
-                Command="{Binding CopyLogDirCommand}">
-            <Image Height="20" Width="20" Source="{StaticResource copy_regularDrawingImage}"/>
+                Command="{Binding OpenLogDirCommand}">
+            <Image Height="20" Width="20" Source="{StaticResource folder_open_solidDrawingImage}"/>
         </Button>
 
         <TextBlock Style="{DynamicResource SettingsTextStyle}" Grid.Row="4" Grid.Column="0" Text="{StaticResource txt_WoW_Settings_Version}"></TextBlock>
