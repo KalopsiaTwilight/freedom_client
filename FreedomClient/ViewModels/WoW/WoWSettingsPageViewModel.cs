@@ -22,6 +22,8 @@ namespace FreedomClient.ViewModels.WoW
 
         public ICommand? ChangeInstallPathCommand { get; set; }
 
+        public ICommand? ResetDB2FilesCommand { get; set; }
+
         public ICommand? SecretTriggeredCommand { get; set; }
 
         public ApplicationState ApplicationState { get; set; }
@@ -71,6 +73,11 @@ namespace FreedomClient.ViewModels.WoW
                 (_) =>
                 {
                     ApplicationState.UIOperation.Message = "You entered the secret code!";
+                });
+            ResetDB2FilesCommand = new RelayCommand((_) => !ApplicationState.UIOperation.IsBusy,
+                (_) =>
+                {
+                    mediator.Send(new RestoreWoWDB2FilesCommand() { });
                 });
         }
     }

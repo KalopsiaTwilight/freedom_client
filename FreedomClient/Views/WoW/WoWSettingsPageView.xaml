@@ -24,6 +24,7 @@
             <RowDefinition Height="32"></RowDefinition>
             <RowDefinition Height="10"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
         </Grid.RowDefinitions>
         
         <TextBlock Style="{DynamicResource SettingsTextStyle}" Grid.Row="0" Grid.Column="0" Text="{StaticResource txt_WoW_Settings_InstallDir}" />
@@ -54,16 +55,22 @@
          Text="{Binding Version}"/>
 
         <Button Style="{DynamicResource BigButton}" 
-                Grid.Row="7" Grid.ColumnSpan="4" 
+                Grid.Row="6" Grid.ColumnSpan="4" 
                 Content="{StaticResource txt_WoW_Settings_SoftResetInstall}"
                 Command="{Binding SoftResetInstallCommand}"
                 Margin="0,0,210,0"
             />
         <Button Style="{DynamicResource BigButton}" 
-                Grid.Row="7" Grid.ColumnSpan="4" 
+                Grid.Row="6" Grid.ColumnSpan="4" 
                 Content="{StaticResource txt_WoW_Settings_HardResetInstall}"
                 Command="{Binding HardResetInstallCommand}"
                 Margin="210,0,0,0"
+            />
+        <Button Style="{DynamicResource BigButton}" 
+                Grid.Row="7" Grid.ColumnSpan="4" 
+                Content="{StaticResource txt_WoW_Settings_ResetDB2}"
+                Command="{Binding ResetDB2FilesCommand}"
+                Margin="0,0,0,0"
             />
     </Grid>
 </Page>

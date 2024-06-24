@@ -49,6 +49,16 @@ namespace FreedomClient.Core
             }
             return result;
         }
+
+        public DownloadManifest Filter(Func<KeyValuePair<string, DownloadManifestEntry>, bool> filterFunc)
+        {
+            DownloadManifest result = new();
+            foreach (var item in this.Where(filterFunc))
+            {
+                result.Add(item.Key, item.Value);
+            };
+            return result;
+        }
     }
 
     public class DownloadManifestEntry: IEquatable<DownloadManifestEntry>
