@@ -87,6 +87,13 @@ namespace FreedomClient.Commands
                     _logger.LogInformation("Starting client files update...");
                     // Get update manifest
                     var patchManifest = latestManifest.CreatePatchManifestFrom(_appState.LastManifest);
+
+                    // Ignore updates to config file 
+                    if (patchManifest.ContainsKey("_retail_/WTF/Config.wtf"))
+                    {
+                        patchManifest.Remove("_retail_/WTF/Config.wtf");
+                    }
+
                     _appState.LoadState = ApplicationLoadState.CheckForUpdate;
                     _appState.UIOperation.Message = "Updating...";
                     await _fileClient.EnsureFilesInManifest(patchManifest, _appState.InstallPath, uiCancelToken);
