@@ -88,6 +88,20 @@ namespace FreedomClient.Commands
                     _appState.AvailableAddons.ForEach(x => x.IsInstalled = false);
                     _appState.AvailablePatches.ForEach(x => x.IsInstalled = false);
                 }
+
+                if (!_appState.InstalledAddons.Any(x => x.Title == Addon.TotalRP3.Title))
+                {
+                    var addon = Addon.TotalRP3;
+                    addon.IsInstalled = true;
+                    _appState.InstalledAddons.Add(addon);
+                }
+                if (!_appState.InstalledAddons.Any(x => x.Title == Addon.Elephant.Title))
+                {
+                    var addon = Addon.Elephant;
+                    addon.IsInstalled = true;
+                    _appState.InstalledAddons.Add(addon);
+                }
+
                 _appState.LoadState = ApplicationLoadState.ReadyToLaunch;
                 _appState.UIOperation.Progress = 100;
                 _appState.UIOperation.Message = "Installation succesfully restored!.";

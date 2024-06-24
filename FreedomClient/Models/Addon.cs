@@ -41,6 +41,28 @@ namespace FreedomClient.Models
         }
         public string Manifest { get; set; }
         public string Signature{ get; set; }
+
+        public static Addon TotalRP3 = new Addon()
+        {
+            Manifest =  "https://cdn.wowfreedom-rp.com/client_content/addons/totalRP3.manifest",
+            Title = "Total RP 3",
+            Signature =  "https://cdn.wowfreedom-rp.com/client_content/addons/totalRP3.signature",
+            ImageSrc = "https://media.forgecdn.net/avatars/219/404/637015802143725785.png",
+            Version = "2.3.13",
+            Author = "Telkostrasz \u0026 Ellypse",
+            Description = "The best roleplaying addon for World of Warcraft."
+        };
+
+        public static Addon Elephant = new Addon()
+        {
+            Manifest = "https://cdn.wowfreedom-rp.com/client_content/addons/Elephant.manifest",
+            Title = "Elephant",
+            Signature = "https://cdn.wowfreedom-rp.com/client_content/addons/Elephant.signature",
+            ImageSrc = "https://media.forgecdn.net/avatars/64/706/636155467072456515.jpeg",
+            Version = "9.2.7",
+            Author = "AllInOneMighty",
+            Description = "A friendly companion that remembers the chat."
+        };
     }
 
     [AddINotifyPropertyChangedInterface]
