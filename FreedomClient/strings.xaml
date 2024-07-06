@@ -39,4 +39,7 @@
     <clr:String x:Key="txt_WoW_Settings_TT_InstallDir">Change Path</clr:String>
     <clr:String x:Key="txt_WoW_Settings_Version">Launcher Version</clr:String>
     <clr:String x:Key="txt_WoW_Settings_ResetDB2">Reset DB2 files</clr:String>
+
+    <clr:String x:Key="txt_CyclingBackgroundImage_GoNext">Go to next image</clr:String>
+    <clr:String x:Key="txt_CyclingBackgroundImage_GoPrevious">Go to previous image</clr:String>
 </ResourceDictionary>

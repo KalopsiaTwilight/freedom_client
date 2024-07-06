@@ -26,6 +26,8 @@ namespace FreedomClient.Controls
     /// </summary>
     public partial class CyclingBackgroundImage : UserControl
     {
+        private const int CyclingTimeMs = 10000;
+
         private Timer? _timer;
         private int _currentIndex;
         public ILogger<CyclingBackgroundImage>? Logger;
@@ -33,6 +35,12 @@ namespace FreedomClient.Controls
         public CyclingBackgroundImage()
         {
             InitializeComponent();
+
+            CurrentVisualState = "Determinate";
+            CommonStates.CurrentStateChanged += (se, ev) =>
+            {
+                CurrentVisualState = ev.NewState.Name;
+            };
         }
 
         public static void UpdateVisualState(object? state)
@@ -42,16 +50,50 @@ namespace FreedomClient.Controls
             {
                 return;
             }
+            GoToNextImage(me);
+        }
+
+
+        private void BtnPrev_Click(object sender, RoutedEventArgs e)
+        {
+            _timer?.Change(CyclingTimeMs, CyclingTimeMs);
+            Task.Run(() => GoToPrevImage(this));
+        }
+        private void BtnNext_Click(object sender, RoutedEventArgs e)
+        {
+            _timer?.Change(CyclingTimeMs, CyclingTimeMs);
+            Task.Run(() => GoToNextImage(this));
+        }
+
+        private static void GoToNextImage(CyclingBackgroundImage me)
+        {
             me.Dispatcher.Invoke(() =>
             {
-                VisualStateManager.GoToState(me, "Cycling", true);
+                VisualStateManager.GoToState(me, "CyclingForward", true);
             });
             Thread.Sleep(2200);
             me.Dispatcher.Invoke(() =>
             {
                 me._currentIndex = (me._currentIndex + 1) % me.ImagePaths.Count;
-                me.Image1Source = me.SafeGetImageAtIndex(me._currentIndex);
-                me.Image2Source = me.SafeGetImageAtIndex((me._currentIndex + 1) % me.ImagePaths.Count);
+                me.PrevImageSource = me.SafeGetImageAtIndex((me._currentIndex - 1 + me.ImagePaths.Count) % me.ImagePaths.Count);
+                me.MainImageSource = me.SafeGetImageAtIndex(me._currentIndex);
+                me.NextImageSource = me.SafeGetImageAtIndex((me._currentIndex + 1) % me.ImagePaths.Count);
+                VisualStateManager.GoToState(me, "Determinate", true);
+            });
+        }
+        private static void GoToPrevImage(CyclingBackgroundImage me)
+        {
+            me.Dispatcher.Invoke(() =>
+            {
+                VisualStateManager.GoToState(me, "CyclingBackward", true);
+            });
+            Thread.Sleep(2200);
+            me.Dispatcher.Invoke(() =>
+            {
+                me._currentIndex = (me._currentIndex - 1 + me.ImagePaths.Count) % me.ImagePaths.Count;
+                me.PrevImageSource = me.SafeGetImageAtIndex((me._currentIndex - 1 + me.ImagePaths.Count) % me.ImagePaths.Count);
+                me.MainImageSource = me.SafeGetImageAtIndex(me._currentIndex);
+                me.NextImageSource = me.SafeGetImageAtIndex((me._currentIndex + 1) % me.ImagePaths.Count);
                 VisualStateManager.GoToState(me, "Determinate", true);
             });
         }
@@ -100,26 +142,33 @@ namespace FreedomClient.Controls
                 me._timer?.Dispose();
                 if (me.ImagePaths.Count == 1)
                 {
-                    me.Image1Source = me.SafeGetImageAtIndex(0);
+                    me.MainImageSource = me.SafeGetImageAtIndex(0);
                 }
                 else if (me.ImagePaths.Count > 1)
                 {
-                    var currentImage = (me.Image1Source as BitmapImage);
+                    var currentImage = (me.MainImageSource as BitmapImage);
                     var foundIndex = me.ImagePaths.IndexOf(currentImage?.UriSource?.AbsolutePath?.Replace("/", "\\") ?? "");
                     if (currentImage == null || foundIndex == -1)
                     {
                         me._currentIndex = Random.Shared.Next(0, me.ImagePaths.Count - 1);
-                        me.Image1Source = me.SafeGetImageAtIndex(me._currentIndex);
+                        me.MainImageSource = me.SafeGetImageAtIndex(me._currentIndex);
                     }
                     else
                     {
                         me._currentIndex = foundIndex;
                     }
-                    me.Image2Source = me.SafeGetImageAtIndex(me._currentIndex + 1 % me.ImagePaths.Count);
-                    me._timer = new Timer(new TimerCallback(UpdateVisualState), me, 10000, 10000);
+                    me.PrevImageSource = me.SafeGetImageAtIndex((me._currentIndex - 1 + me.ImagePaths.Count) % me.ImagePaths.Count);
+                    me.NextImageSource = me.SafeGetImageAtIndex(me._currentIndex + 1 % me.ImagePaths.Count);
+                    me._timer = new Timer(new TimerCallback(UpdateVisualState), me, CyclingTimeMs, CyclingTimeMs);
                 }
 
             }
+        }
+
+        public string CurrentVisualState
+        {
+            get { return (string)GetValue(CurrentVisualStateProperty); }
+            set { SetValue(CurrentVisualStateProperty, value); }
         }
 
         public ObservableCollection<string> ImagePaths
@@ -127,27 +176,44 @@ namespace FreedomClient.Controls
             get { return (ObservableCollection<string>)GetValue(ImagePathsProperty); }
             set { SetValue(ImagePathsProperty, value); }
         }
-
-        private ImageSource Image1Source
+        private ImageSource PrevImageSource
         {
-            get { return (ImageSource)GetValue(Image1SourceProperty); }
-            set { SetValue(Image1SourceProperty, value); }
-        }
-        private ImageSource Image2Source
-        {
-            get { return (ImageSource)GetValue(Image2SourceProperty); }
-            set { SetValue(Image2SourceProperty, value); }
+            get { return (ImageSource)GetValue(PrevImageSourceProperty); }
+            set { SetValue(PrevImageSourceProperty, value); }
         }
 
-        public static readonly DependencyProperty Image1SourceProperty =
+        private ImageSource MainImageSource
+        {
+            get { return (ImageSource)GetValue(MainImageSourceProperty); }
+            set { SetValue(MainImageSourceProperty, value); }
+        }
+        private ImageSource NextImageSource
+        {
+            get { return (ImageSource)GetValue(NextImageSourceProperty); }
+            set { SetValue(NextImageSourceProperty, value); }
+        }
+
+        public static readonly DependencyProperty CurrentVisualStateProperty =
             DependencyProperty.Register(
-                nameof(Image1Source),
+                nameof(CurrentVisualState),
+                typeof(string),
+                typeof(CyclingBackgroundImage));
+
+        public static readonly DependencyProperty MainImageSourceProperty =
+            DependencyProperty.Register(
+                nameof(MainImageSource),
                 typeof(ImageSource),
                 typeof(CyclingBackgroundImage));
 
-        public static readonly DependencyProperty Image2SourceProperty =
+        public static readonly DependencyProperty PrevImageSourceProperty =
             DependencyProperty.Register(
-                nameof(Image2Source),
+                nameof(PrevImageSource),
+                typeof(ImageSource),
+                typeof(CyclingBackgroundImage));
+
+        public static readonly DependencyProperty NextImageSourceProperty =
+            DependencyProperty.Register(
+                nameof(NextImageSource),
                 typeof(ImageSource),
                 typeof(CyclingBackgroundImage));
 
