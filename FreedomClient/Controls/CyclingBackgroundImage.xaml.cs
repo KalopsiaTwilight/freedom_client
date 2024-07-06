@@ -98,16 +98,27 @@ namespace FreedomClient.Controls
             if (dObject is CyclingBackgroundImage me)
             {
                 me._timer?.Dispose();
-                if (me.ImagePaths.Count > 0)
+                if (me.ImagePaths.Count == 1)
                 {
                     me.Image1Source = me.SafeGetImageAtIndex(0);
                 }
-                if (me.ImagePaths.Count > 1)
+                else if (me.ImagePaths.Count > 1)
                 {
-                    me.Image2Source = me.SafeGetImageAtIndex(1);
-                    me._currentIndex = 0;
+                    var currentImage = (me.Image1Source as BitmapImage);
+                    var foundIndex = me.ImagePaths.IndexOf(currentImage?.UriSource?.AbsolutePath?.Replace("/", "\\") ?? "");
+                    if (currentImage == null || foundIndex == -1)
+                    {
+                        me._currentIndex = Random.Shared.Next(0, me.ImagePaths.Count - 1);
+                        me.Image1Source = me.SafeGetImageAtIndex(me._currentIndex);
+                    }
+                    else
+                    {
+                        me._currentIndex = foundIndex;
+                    }
+                    me.Image2Source = me.SafeGetImageAtIndex(me._currentIndex + 1 % me.ImagePaths.Count);
                     me._timer = new Timer(new TimerCallback(UpdateVisualState), me, 10000, 10000);
                 }
+
             }
         }
 

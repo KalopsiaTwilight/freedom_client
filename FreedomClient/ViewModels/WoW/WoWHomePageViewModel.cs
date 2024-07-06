@@ -148,7 +148,7 @@ namespace FreedomClient.ViewModels.WoW
                 }
                 imageCollection.Add(outputPath);
             }
-            LauncherImages = new ObservableCollection<string>(imageCollection.OrderBy(x => Path.GetFileName(x)).ToList());
+            LauncherImages = new ObservableCollection<string>(imageCollection.OrderBy(x => Random.Shared.Next()).ToList());
             // Clean up old images
             foreach (var img in _appState.LauncherImages)
             {
